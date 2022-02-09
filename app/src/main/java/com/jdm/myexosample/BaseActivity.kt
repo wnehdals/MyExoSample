@@ -5,7 +5,8 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-
+import dagger.hilt.android.AndroidEntryPoint
+import kotlin.properties.ReadOnlyProperty
 abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     @get:LayoutRes abstract  val layoutId: Int
     private lateinit var _binding: T
