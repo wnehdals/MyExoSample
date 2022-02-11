@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">MyExoSample</string>
+    <string name="loading">로딩중</string>
+    <string name="noti">알림</string>
+    <string name="unkown_error">알 수 없는 오류가\n발생했습니다.</string>
+    <string name="ok">확인</string>
+    <string name="previous">-10</string>
+    <string name="next">+10</string>
+    <string name="start">시작</string>
+    <string name="pause">일시중지</string>
 </resources>

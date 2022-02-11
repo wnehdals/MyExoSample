@@ -3,7 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/drawable/background_dialog.xml" value="0.19074074074074074" />
+        <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.1453125" />
+        <entry key="app/src/main/res/layout-land/activity_play.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-port/activity_main.xml" value="0.1828774062816616" />
+        <entry key="app/src/main/res/layout-port/activity_play.xml" value="0.12635869565217392" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_play.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/dialog_simple.xml" value="0.1828774062816616" />
+        <entry key="app/src/main/res/layout/exo_player_control_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_video.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_video_description.xml" value="0.20885416666666667" />
+        <entry key="app/src/main/res/layout/layout_player_controller.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/layout_progressbar.xml" value="0.1828774062816616" />
       </map>
     </option>
   </component>

@@ -10,30 +10,38 @@ import com.google.android.exoplayer2.upstream.DataSpec
 
 import com.google.android.exoplayer2.upstream.HttpDataSource.HttpDataSourceException
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException
+import com.jdm.myexosample.state.PlayState
+import com.jdm.myexosample.ui.play.PlayViewModel
 
 
-class PlayBackStateListener: Player.Listener {
+class PlayBackStateListener(private val viewModel: PlayViewModel): Player.Listener {
     override fun onPlaybackStateChanged(playbackState: Int) {
         super.onPlaybackStateChanged(playbackState)
         when (playbackState) {
             Player.STATE_IDLE -> {
-                Log.e(TAG2, "idle")
+                viewModel.playState.value = PlayState.Uninitialized
             }
             Player.STATE_BUFFERING -> {
-                Log.e(TAG2, "buffering")
+                viewModel.playState.value = PlayState.Loading
             }
             Player.STATE_READY -> {
-                Log.e(TAG2, "ready")
+                viewModel.playState.value = PlayState.Ready
             }
             Player.STATE_ENDED -> {
-                Log.e(TAG2, "end")
+                viewModel.playState.value = PlayState.Finish
             }
         }
+        Log.e(TAG1, viewModel.playState.value!!.javaClass.name.toString())
     }
 
     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
         super.onPlayWhenReadyChanged(playWhenReady, reason)
-        Log.e(TAG3, "playWhenReady : ${playWhenReady} / reason : ${reason}")
+        if (playWhenReady) {
+            viewModel.playState.value = PlayState.Playing
+        } else {
+            viewModel.playState.value = PlayState.Pause
+        }
+        Log.e(TAG1, viewModel.playState.value!!.javaClass.name.toString())
     }
 
     override fun onPlayerError(error: PlaybackException) {
