@@ -1,6 +1,7 @@
 package com.jdm.myexosample.ui.main
 
 import android.content.Intent
+import android.util.Log
 import com.jdm.myexosample.databinding.ActivityMainBinding
 import androidx.activity.viewModels
 import com.jdm.myexosample.base.BaseActivity
@@ -25,7 +26,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             onClick = this@MainActivity::onClickVideoItem
         }
         binding.mainRecyclerview.adapter = videoAdapter
-
+        Log.e("screensize",getString(R.string.screen_size))
 
     }
 

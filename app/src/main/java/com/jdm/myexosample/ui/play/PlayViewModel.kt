@@ -17,6 +17,8 @@ class PlayViewModel: BaseViewModel() {
 
     val playState = MutableLiveData<PlayState>(PlayState.Uninitialized)
     var currentIdx = 0
-    val isFull = MutableLiveData<Boolean>()
+    var currentPosition = 0L
+    val isFull = MutableLiveData<Boolean>(false)
+    var isPhone = false
 
 }

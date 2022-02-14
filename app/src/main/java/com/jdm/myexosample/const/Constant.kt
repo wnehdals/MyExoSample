@@ -11,3 +11,7 @@ const val SEEK_BACKWARD_MS = 10000L
 /* RecyclerView Type */
 const val VIDEO_DESCRIPTION_ITEM = -1
 const val VIDEO_ITEM = 1
+
+/* Screen Type */
+const val PHONE = "phone"
+const val TABLET = "tablet"

@@ -12,7 +12,7 @@ import com.jdm.myexosample.R
 abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     @get:LayoutRes
     abstract val layoutId: Int
-    private lateinit var _binding: T
+    lateinit var _binding: T
     val binding: T
         get() = _binding
     private var progressDialog: ProgressDialog? = null

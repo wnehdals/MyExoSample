@@ -8,5 +8,5 @@
     <string name="next">+10</string>
     <string name="start">시작</string>
     <string name="pause">일시중지</string>
-    <string name="screen_size">phone</string>
+    <string name="screen_size">tablet</string>
 </resources>

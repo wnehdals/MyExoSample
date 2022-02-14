@@ -14,6 +14,7 @@
         android:theme="@style/Theme.MyExoSample"
         android:usesCleartextTraffic="true">
         <activity
+            android:resizeableActivity="true"
             android:name=".ui.play.PlayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true" />
