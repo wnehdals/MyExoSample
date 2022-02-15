@@ -16,7 +16,7 @@
         <activity
             android:resizeableActivity="true"
             android:name=".ui.play.PlayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:exported="true" />
         <activity
             android:name=".ui.main.MainActivity"

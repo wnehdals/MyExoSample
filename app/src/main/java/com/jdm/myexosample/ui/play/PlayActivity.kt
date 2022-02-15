@@ -5,16 +5,26 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Build
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Display
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.window.layout.DisplayFeature
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
+import androidx.window.layout.WindowLayoutInfo
+import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.jdm.myexosample.PlayBackStateListener
@@ -31,7 +41,10 @@ import com.jdm.myexosample.state.PlayState
 import com.jdm.myexosample.ui.main.VideoListAdapter
 import kotlinx.android.synthetic.main.activity_play.*
 import kotlinx.android.synthetic.main.exo_player_control_view.*
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 class PlayActivity : BaseActivity<ActivityPlayBinding>() {
 
     override val layoutId: Int
@@ -41,7 +54,18 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     private var player: ExoPlayer? = null
     private var videoAdapter = PlayListAdapter()
     private lateinit var playBackStateListener: PlayBackStateListener
+    private val stateLog: StringBuilder = StringBuilder()
+    @OptIn(InternalCoroutinesApi::class)
     override fun initView() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                WindowInfoTracker.getOrCreate(this@PlayActivity)
+                    .windowLayoutInfo(this@PlayActivity)
+                    .collect { newLayoutInfo ->
+                        updateStateLog(newLayoutInfo)
+                    }
+            }
+        }
         viewModel.isFull.value =
             !(getDisplayInstance()?.rotation == Surface.ROTATION_0 || getDisplayInstance()?.rotation == Surface.ROTATION_180)
         checkDeviceType()
@@ -56,6 +80,44 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
         playBackStateListener = PlayBackStateListener(viewModel)
         player?.addListener(playBackStateListener)
         readyToPlay()
+    }
+    private fun setDisplayRatio() {
+        val windowMetrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
+        val currentBounds = windowMetrics.bounds
+        viewModel.portraitWidth = currentBounds.width()
+        viewModel.portraitHeight = currentBounds.width() * 9 / 16
+        Log.e("sdfsdf","${viewModel.portraitWidth} / ${viewModel.portraitHeight}")
+    }
+    private fun updateStateLog(layoutInfo: WindowLayoutInfo) {
+        for (displayFeature in layoutInfo.displayFeatures) {
+            val foldFeature = displayFeature as? FoldingFeature
+            if (foldFeature != null) {
+                if (foldFeature.orientation == FoldingFeature.Orientation.HORIZONTAL) {
+                    Log.e("foldfeature","hinge is horizontal")
+
+                    if (viewModel.isFull.value == false) {
+                        if(foldFeature.state == FoldingFeature.State.HALF_OPENED) {
+                            Log.e("foldfeature","flex mode start")
+                            var cl = binding.playerConstraintlayout.layoutParams as ConstraintLayout.LayoutParams
+                            cl.bottomToTop = binding.playerRecyclerview.id
+                            cl.dimensionRatio = null
+                            binding.playerConstraintlayout.layoutParams = cl
+                        } else {
+                            Log.e("foldfeature","flex mode out")
+                            var cl = binding.playerConstraintlayout.layoutParams as ConstraintLayout.LayoutParams
+                            cl.bottomToTop = ConstraintLayout.LayoutParams.UNSET
+                            cl.dimensionRatio = "H,16:9"
+                            binding.playerConstraintlayout.layoutParams = cl
+                        }
+
+                    }
+
+                } else {
+                    Log.e("foldfeature","hinge is vertical")
+                }
+
+            }
+        }
     }
     private fun checkDeviceType() {
         viewModel.isPhone = getString(R.string.screen_size) == PHONE
@@ -154,7 +216,6 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     }
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        Log.e("onconfig",newConfig.toString())
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.e("onconfig","land")
             viewModel.isFull.value = true

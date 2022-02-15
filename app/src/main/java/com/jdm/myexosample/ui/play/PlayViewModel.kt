@@ -14,7 +14,8 @@ class PlayViewModel: BaseViewModel() {
 
 
     var mediaItem: MediaItem? = null
-
+    var portraitWidth = 0
+    var portraitHeight = 0
     val playState = MutableLiveData<PlayState>(PlayState.Uninitialized)
     var currentIdx = 0
     var currentPosition = 0L
