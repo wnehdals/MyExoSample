@@ -26,7 +26,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             onClick = this@MainActivity::onClickVideoItem
         }
         binding.mainRecyclerview.adapter = videoAdapter
-        Log.e("screensize",getString(R.string.screen_size))
 
     }
 

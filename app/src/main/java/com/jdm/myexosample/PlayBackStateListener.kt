@@ -31,7 +31,6 @@ class PlayBackStateListener(private val viewModel: PlayViewModel): Player.Listen
                 viewModel.playState.value = PlayState.Finish
             }
         }
-        Log.e(TAG1, viewModel.playState.value!!.javaClass.name.toString())
     }
 
     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
@@ -41,7 +40,6 @@ class PlayBackStateListener(private val viewModel: PlayViewModel): Player.Listen
         } else {
             viewModel.playState.value = PlayState.Pause
         }
-        Log.e(TAG1, viewModel.playState.value!!.javaClass.name.toString())
     }
 
     override fun onPlayerError(error: PlaybackException) {
@@ -53,7 +51,6 @@ class PlayBackStateListener(private val viewModel: PlayViewModel): Player.Listen
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         super.onMediaItemTransition(mediaItem, reason)
-        Log.e(TAG4, "mediaId : ${mediaItem?.mediaId} / ${mediaItem?.mediaMetadata}")
     }
 
     companion object {

@@ -5,20 +5,20 @@
     android:gravity="start"
     android:background="@color/white"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="@dimen/dp_10">
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp" />
+        android:paddingHorizontal="@dimen/dp_20" />
 
     <TextView
         android:id="@+id/progress_message"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
         android:text="Loading.." />
 
 

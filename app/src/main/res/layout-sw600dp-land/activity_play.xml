@@ -1,37 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/player_background_constraintlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:keepScreenOn="true">
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/player_hinge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5"/>
+            app:layout_constraintGuide_percent="0.5" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/player_constraintlayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/player_recyclerview"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintWidth_percent="0.7"
-            >
+            app:layout_constraintEnd_toStartOf="@+id/player_recyclerview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <com.google.android.exoplayer2.ui.PlayerView
                 android:id="@+id/player_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:surface_type="surface_view"
-                app:controller_layout_id="@layout/exo_player_control_view">
+                app:controller_layout_id="@layout/exo_player_control_view"
+                app:surface_type="surface_view">
 
             </com.google.android.exoplayer2.ui.PlayerView>
 
@@ -40,14 +42,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/player_recyclerview"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dp_300"
             android:layout_height="0dp"
-            app:layout_constraintWidth_percent="0.3"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/player_constraintlayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

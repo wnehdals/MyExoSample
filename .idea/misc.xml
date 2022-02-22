@@ -6,12 +6,20 @@
         <entry key="app/src/main/res/drawable/background_dialog.xml" value="0.19074074074074074" />
         <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.1453125" />
         <entry key="app/src/main/res/layout-land/activity_play.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-land/dialog_simple.xml" value="0.318342151675485" />
+        <entry key="app/src/main/res/layout-land/exo_player_control_view.xml" value="0.318342151675485" />
         <entry key="app/src/main/res/layout-port/activity_main.xml" value="0.1828774062816616" />
         <entry key="app/src/main/res/layout-port/activity_play.xml" value="0.22" />
+        <entry key="app/src/main/res/layout-port/dialog_simple.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout-port/exo_player_control_view.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout-sw600dp-land/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout-sw600dp-land/activity_play.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-sw600dp-land/dialog_simple.xml" value="0.2878787878787879" />
+        <entry key="app/src/main/res/layout-sw600dp-land/exo_player_control_view.xml" value="0.2878787878787879" />
         <entry key="app/src/main/res/layout-sw600dp-port/activity_main.xml" value="0.361" />
         <entry key="app/src/main/res/layout-sw600dp-port/activity_play.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-sw600dp-port/dialog_simple.xml" value="0.361" />
+        <entry key="app/src/main/res/layout-sw600dp-port/exo_player_control_view.xml" value="0.361" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_play.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_simple.xml" value="0.1828774062816616" />

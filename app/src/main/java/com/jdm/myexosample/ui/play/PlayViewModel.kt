@@ -20,6 +20,7 @@ class PlayViewModel: BaseViewModel() {
     var currentIdx = 0
     var currentPosition = 0L
     val isFull = MutableLiveData<Boolean>(false)
+    var isPortrait = true
     var isPhone = false
 
 }
