@@ -16,6 +16,8 @@
         <activity
             android:resizeableActivity="true"
             android:name=".ui.play.PlayActivity"
+            android:supportsPictureInPicture="true"
+            android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:exported="true" />
         <activity

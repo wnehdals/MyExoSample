@@ -1,9 +1,12 @@
 package com.jdm.myexosample.ui.play
 
+import android.app.PictureInPictureParams
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
+import android.util.Rational
 import android.view.Display
 import android.view.Surface
 import android.view.View
@@ -47,8 +50,9 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     private var player: ExoPlayer? = null
     private var videoAdapter = PlayListAdapter()
     private lateinit var playBackStateListener: PlayBackStateListener
-    private val stateLog: StringBuilder = StringBuilder()
+    private var pipParamBuilder: PictureInPictureParams.Builder? = null
     override fun initView() {
+        Log.e("click", "oncreate")
         setFoldableStateListener()
         viewModel.isPortrait =
             (getDisplayInstance()?.rotation == Surface.ROTATION_0 || getDisplayInstance()?.rotation == Surface.ROTATION_180)
@@ -125,9 +129,7 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
 
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
+
     override fun initEvent() {
         with(binding) {
 
@@ -236,10 +238,20 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     }
 
     private fun setIntentData() {
+        Log.e("asd","intent")
         videos = intent.getParcelableArrayListExtra<Video>(VIDEO_LIST) ?: ArrayList()
         videos.add(0, Video())
         viewModel.videoList.addAll(videos)
         viewModel.currentIdx = intent.getIntExtra(SELECTED_VIDEO, 0) + 1
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        viewModel.currentIdx = intent?.getIntExtra(SELECTED_VIDEO, 0)!! + 1
+        changeVideoInfoText()
+        deleteMediaItem()
+        setMediaItem()
+        readyToPlay()
     }
 
     private fun setVideoList() {
@@ -274,6 +286,7 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     }
 
     private fun onClickVideoItem(position: Int) {
+        Log.e("click", "${position}")
         viewModel.currentIdx = position
         changeVideoInfoText()
         deleteMediaItem()
@@ -281,15 +294,58 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
         readyToPlay()
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        startPIP()
+    }
+    override fun onPause() {
+        super.onPause()
+    }
+    fun startPIP() {
+        if (isPossibleVersion()) {
+            pipParamBuilder = PictureInPictureParams.Builder()
+            pipParamBuilder?.let {
+                it.setAspectRatio(Rational(16,9))
+                enterPictureInPictureMode(it.build())
+            }
 
+        }
+    }
     override fun onStop() {
         super.onStop()
+        Log.e("onstop", "onstop")
         binding.playerView.player?.let {
             viewModel.currentPosition = it.currentPosition
         }
+        /*
+        if (isPossibleVersion()) {
+            finishAndRemoveTask()
+        }
+
+         */
+    }
+
+    override fun onBackPressed() {
+        if (isPossibleVersion()) {
+            startPIP()
+        } else {
+            super.onBackPressed()
+        }
+
+    }
+    fun isPossibleVersion(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+    }
+
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration?
+    ) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
     }
 
     override fun onDestroy() {
+        Log.e("ondestroy", "onDestroy")
         player?.release()
         player = null
         super.onDestroy()
