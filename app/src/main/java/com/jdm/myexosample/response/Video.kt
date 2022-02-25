@@ -3,6 +3,7 @@ package com.jdm.myexosample.response
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.jdm.myexosample.entity.VideoEntity
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -23,6 +24,9 @@ data class Video(
     @Expose
     var title: String = ""
 ) : Parcelable {
+    fun toVideoEntity(position: Long): VideoEntity {
+        return VideoEntity(id,thumbnail, url, title, position)
+    }
     companion object {
         val EMPTY = Video()
     }

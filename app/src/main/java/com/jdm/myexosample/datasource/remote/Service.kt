@@ -1,4 +1,4 @@
-package com.jdm.myexosample
+package com.jdm.myexosample.datasource.remote
 
 import com.jdm.myexosample.response.CommonResp
 import retrofit2.Response

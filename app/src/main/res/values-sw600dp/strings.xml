@@ -9,4 +9,5 @@
     <string name="start">시작</string>
     <string name="pause">일시중지</string>
     <string name="screen_size">tablet</string>
+    <string name="current_position_guide">마지막 시청시점부터 재생합니다.</string>
 </resources>

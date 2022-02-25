@@ -3,6 +3,7 @@ package com.jdm.myexosample.ui.play
 import android.app.PictureInPictureParams
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
@@ -11,6 +12,7 @@ import android.view.Display
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -26,21 +28,23 @@ import com.google.android.exoplayer2.MediaItem
 import com.jdm.myexosample.PlayBackStateListener
 import com.jdm.myexosample.R
 import com.jdm.myexosample.base.BaseActivity
+import com.jdm.myexosample.base.BaseDialog
+import com.jdm.myexosample.const.FIRST_VIEW_POSITION
 import com.jdm.myexosample.const.PHONE
 import com.jdm.myexosample.const.SEEK_BACKWARD_MS
 import com.jdm.myexosample.const.SEEK_FORWARD_MS
 import com.jdm.myexosample.const.SELECTED_VIDEO
 import com.jdm.myexosample.const.VIDEO_LIST
 import com.jdm.myexosample.databinding.ActivityPlayBinding
-import com.jdm.myexosample.extension.dp
 import com.jdm.myexosample.response.Video
 import com.jdm.myexosample.state.PlayState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_play.*
 import kotlinx.android.synthetic.main.exo_player_control_view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class PlayActivity : BaseActivity<ActivityPlayBinding>() {
 
     override val layoutId: Int
@@ -52,7 +56,6 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     private lateinit var playBackStateListener: PlayBackStateListener
     private var pipParamBuilder: PictureInPictureParams.Builder? = null
     override fun initView() {
-        Log.e("click", "oncreate")
         setFoldableStateListener()
         viewModel.isPortrait =
             (getDisplayInstance()?.rotation == Surface.ROTATION_0 || getDisplayInstance()?.rotation == Surface.ROTATION_180)
@@ -66,7 +69,7 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
 
         playBackStateListener = PlayBackStateListener(viewModel)
         player?.addListener(playBackStateListener)
-        readyToPlay()
+        viewModel.getVideoEntity()
     }
 
     private fun setFoldableStateListener() {
@@ -189,26 +192,30 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     }
 
     override fun subscribe() {
-        viewModel.playState.observe(this, {
+        viewModel.playState.observe(this) {
             when (it) {
                 is PlayState.Loading -> {
-
+                    binding.playProgressbar.visibility = View.VISIBLE
                 }
                 is PlayState.Pause -> {
 
                 }
                 is PlayState.Playing -> {
-
                 }
                 is PlayState.Ready -> {
-
+                    binding.playProgressbar.visibility = View.GONE
                     player?.play()
                 }
                 is PlayState.Finish -> {
-
                 }
             }
-        })
+        }
+        viewModel.currentPosition.observe(this) {
+            if (it > FIRST_VIEW_POSITION) {
+                Toast.makeText(this, getString(R.string.current_position_guide), Toast.LENGTH_SHORT).show()
+            }
+            readyToPlay()
+        }
 
     }
 
@@ -238,7 +245,6 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     }
 
     private fun setIntentData() {
-        Log.e("asd","intent")
         videos = intent.getParcelableArrayListExtra<Video>(VIDEO_LIST) ?: ArrayList()
         videos.add(0, Video())
         viewModel.videoList.addAll(videos)
@@ -251,7 +257,7 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
         changeVideoInfoText()
         deleteMediaItem()
         setMediaItem()
-        readyToPlay()
+        viewModel.getVideoEntity()
     }
 
     private fun setVideoList() {
@@ -272,6 +278,7 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
 
     private fun readyToPlay() {
         player?.setMediaItem(viewModel.mediaItem!!)
+        player?.seekTo(viewModel.currentPosition.value!!)
         player?.prepare()
     }
 
@@ -286,12 +293,11 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
     }
 
     private fun onClickVideoItem(position: Int) {
-        Log.e("click", "${position}")
         viewModel.currentIdx = position
         changeVideoInfoText()
         deleteMediaItem()
         setMediaItem()
-        readyToPlay()
+        viewModel.getVideoEntity()
     }
 
     override fun onUserLeaveHint() {
@@ -311,18 +317,23 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
 
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+
+    }
     override fun onStop() {
         super.onStop()
-        Log.e("onstop", "onstop")
+
         binding.playerView.player?.let {
-            viewModel.currentPosition = it.currentPosition
+            viewModel.currentPosition.value = it.currentPosition
+            it.pause()
+            viewModel.saveVideoPosition(it.currentPosition)
         }
-        /*
-        if (isPossibleVersion()) {
+        if (viewModel.isPIP) {
             finishAndRemoveTask()
         }
 
-         */
     }
 
     override fun onBackPressed() {
@@ -334,7 +345,7 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
 
     }
     fun isPossibleVersion(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
     }
 
     override fun onPictureInPictureModeChanged(
@@ -342,14 +353,20 @@ class PlayActivity : BaseActivity<ActivityPlayBinding>() {
         newConfig: Configuration?
     ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        viewModel.isPIP = isInPictureInPictureMode
+        _binding = DataBindingUtil.setContentView(this, layoutId)
+        if (viewModel.isPIP) {
+            binding.playProgressbar.visibility = View.GONE
+        } else {
+            binding.playProgressbar.visibility = View.GONE
+        }
+
     }
 
     override fun onDestroy() {
-        Log.e("ondestroy", "onDestroy")
         player?.release()
         player = null
         super.onDestroy()
-
     }
 
 }

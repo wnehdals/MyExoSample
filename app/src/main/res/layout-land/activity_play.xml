@@ -33,6 +33,15 @@
                 app:controller_layout_id="@layout/exo_player_control_view">
 
             </com.google.android.exoplayer2.ui.PlayerView>
+            <ProgressBar
+                android:id="@+id/play_progressbar"
+                android:visibility="gone"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="@dimen/dp_100"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

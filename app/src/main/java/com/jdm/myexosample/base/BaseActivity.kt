@@ -67,6 +67,6 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
             positiveButtonText = buttonText,
             positiveButtonOnClickListener = buttonListener,
             cancelable = cancelable
-            )
+            ).show()
     }
 }
