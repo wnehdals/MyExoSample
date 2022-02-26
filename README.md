@@ -19,6 +19,5 @@
 - ViewModel
 ![image](https://user-images.githubusercontent.com/19179275/155831965-0f263721-c37a-46b8-8933-de2d27eaa904.png)
 # ScreenShot
-
-![image](https://user-images.githubusercontent.com/19179275/155832103-43871983-b1de-4d18-a8c6-ebc6744cc253.png)
+![initial](https://user-images.githubusercontent.com/19179275/155832174-d0f8d047-cba0-430e-b3ed-2b6f0086c71b.png)
 ![image](https://user-images.githubusercontent.com/19179275/155832006-31d1feb5-df2e-42b4-8767-e8c4e17fb1ff.png)
