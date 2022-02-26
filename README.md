@@ -20,4 +20,8 @@
 ![image](https://user-images.githubusercontent.com/19179275/155831965-0f263721-c37a-46b8-8933-de2d27eaa904.png)
 # ScreenShot
 ![initial](https://user-images.githubusercontent.com/19179275/155832174-d0f8d047-cba0-430e-b3ed-2b6f0086c71b.png)
-![image](https://user-images.githubusercontent.com/19179275/155832006-31d1feb5-df2e-42b4-8767-e8c4e17fb1ff.png)
+- PIP
+<img width="30%" src="https://user-images.githubusercontent.com/19179275/155832006-31d1feb5-df2e-42b4-8767-e8c4e17fb1ff.png"/>
+- Flex 모드
+<img width="30%" src="https://user-images.githubusercontent.com/19179275/155832444-3fea1c14-ccec-4da4-95c0-4b3e1cb74659.gif"/>
+
